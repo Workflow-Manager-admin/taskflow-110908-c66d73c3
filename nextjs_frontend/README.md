@@ -1,82 +1,54 @@
-# Lightweight React Template for KAVIA
+# Taskify (Next.js + Supabase)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+This is a minimal, clean fullstack task app built with Next.js (App Router) and Tailwind CSS, using Supabase directly for all database operations (CRUD). There is **no custom backend container**: all API+data logic is handled by Supabase's managed backend, via its RESTful API and JavaScript SDK.
+
+## Why is there no custom backend?
+
+- **Supabase is a BaaS (backend-as-a-service)** providing database, API endpoints, and authentication out-of-the-box. For CRUD task management, its direct API is sufficient for most use cases.
+- **All backend logic is hosted on Supabase**. The app uses the [@supabase/supabase-js](https://supabase.com/docs/reference/javascript) SDK to interact with the "tasks" table for CRUD.
+- **If advanced business logic, security, or third-party integrations were needed**, you could add a custom backend container exposing its own API. For Taskify, all "backend" requirements are met by Supabase, so only a frontend project is needed.
+
+## Supabase Table Setup
+
+Make sure your Supabase project has this table:
+
+```
+CREATE TABLE tasks (
+  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+  title text NOT NULL,
+  is_complete boolean DEFAULT FALSE,
+  due_date date
+);
+```
+
+On Supabase's dashboard, enable Row Level Security and allow read/write for public users.
+
+## Environment Variables
+
+Copy `.env.example` to `.env.local` and set your Supabase project credentials:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_KEY=your-supabase-anon-key
+```
 
 ## Features
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- Display all tasks on homepage
+- Add new task (title, optional due date)
+- Edit task title/due date inline
+- Mark complete/incomplete via checkbox
+- Delete task
+- Sort by due date or completed status
+- Fully responsive, minimal Tailwind UI
+- All CRUD via direct Supabase API calls
 
-## Getting Started
+## Running locally
 
-In the project directory, you can run:
+1. Install deps: `npm install`
+2. Copy `.env.example` to `.env.local`, set credentials
+3. Start dev server: `npm run dev`
 
-### `npm start`
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-### `npm test`
-
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-```
-
-### Components
-
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
-
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
-
-## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+For more advanced logic or to require a dedicated API/backend, add a Next.js API route or a backend container as needed.
