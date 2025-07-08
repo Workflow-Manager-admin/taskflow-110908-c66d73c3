@@ -1,0 +1,4 @@
+{
+    "command": "npm run test",
+    "working_directory": "/home/kavia/workspace/code-generation/taskflow-110908-c66d73c3/nextjs_frontend"
+}
